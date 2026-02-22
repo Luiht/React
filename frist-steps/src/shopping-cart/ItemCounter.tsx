@@ -1,10 +1,23 @@
-    interface Props {
+ import { useState } from "react";
+ interface Props {
         name: string;
-        quantity?: number;  // quantity opcional
+        quantity?: number;  
     }
 
 
 export const ItemCounter = ({name, quantity}: Props) => {
+    const [count, setCount] = useState(quantity);
+
+    const handleAdd = () => {
+        setCount(count + 1);
+    };
+
+        const handleSubtract = () => {
+        if (count ===1) return;
+        setCount(count -1);
+    };
+
+
     return  (
     
         <section style={{
@@ -14,14 +27,16 @@ export const ItemCounter = ({name, quantity}: Props) => {
             marginTop: '10px',
         }}
         >
-            <span style={{
-                width:150,
-            }}
-            >{name}</span>
-            <button >+1</button>
-            <span>{quantity}</span>
-            <button>-1</button>
+            <span 
+                style={{
+                    color: count === 1 ? 'red': 'black',
+                }}
+           >
+            {name}</span>
+            <button onClick={handleAdd} >+1</button>
+            <span>{count}</span>
+            <button onClick={handleSubtract}>-1</button>
         </section>
         
-    )
-}
+    );
+};
