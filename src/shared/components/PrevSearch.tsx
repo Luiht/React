@@ -11,9 +11,12 @@ export const PrevSearch = ({ searches, onLabelClick }: Props) => {
             <h2>Búsquedas previas</h2>
             <ul className="previous-searches-list">
                 {searches.map((term) => (
-                    <li key={term}>
-                        onClick={() =>onLabelClick(term)}
-                        {term}</li>
+                    <li 
+                    key={term}
+                    onClick={() =>onLabelClick(term)}
+                    >
+                
+                    {term}</li>
                 ))}
             </ul>
         </div>

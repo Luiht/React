@@ -1,38 +1,55 @@
-import { mockGifs } from "./mock-data/gifs/gifs.mock"
-import { CustomHeader } from "./shared/components/CustomHeader"
-import { SearchBar } from "./shared/components/SearchBar"
-import { PrevSearch } from "./shared/components/PrevSearch"
-import { GifsList } from "./shared/components/GifsList"
+import { useState} from 'react';
+
+import { GifList } from './gifs/components/GifList';
+import { PreviousSearches } from './gifs/components/PreviousSearches';
+
+import { CustomHeader } from './shared/components/CustomHeader';
+import { SearchBar } from './shared/components/SearchBar';
+import type { Gif } from './gifs/interfaces/gif.interface';
+import { getGifsByQuery } from './gifs/actions/get-gifs-by-query.action';
+import { mockGifs } from './mock-data/gifs.mock';
 
 
+export const GifsApp = () => {
+  const [gifs, setGifs] = useState<Gif[]>([]);
+  const [previousTerms, setPreviousTerms] = useState<string[]>([]);
 
-export const GifsApp = () =>{
+  const handleTermClicked = (term: string) => {
+    console.log({ term });
+  };
 
-    const handleTermClick = (term: string) => {
-        console.log({term}),
-    }
+  const handleSearch = async (query: string = '') => {
+    query = query.trim().toLowerCase();
 
+    if (query.length === 0) return;
 
+    if (previousTerms.includes(query)) return;
 
+    setPreviousTerms([query, ...previousTerms].splice(0, 8));
 
-    const [previusTerms, setpreviusTerms] = useState(['DRBZ'])
-    return (
-        <>
-        {/* Header */}
-        <CustomHeader title="Buscador de Gifs" description="Descubre y comparte el Gif perfecto"/>
+    const gifs = await getGifsByQuery(query);
+    setGifs(gifs);
+  };
 
+  return (
+    <>
+      {/* Header */}
+      <CustomHeader
+        title="Buscador de Gifs"
+        description="Descubre y comparte el Gif perfecto"
+      />
 
-        {/* Search */}
-        <SearchBar/>
+      {/* Search */}
+      <SearchBar placeholder="Busca lo que quieras" onQuery={handleSearch} />
 
-        {/* Busquedas previas */}
-        <PrevSearch searches={previusTerms} 
-        onLabelClick={handleTermClick}/>
+      {/* Búsquedas previas */}
+      <PreviousSearches
+        searches={previousTerms}
+        onLabelClicked={handleTermClicked}
+      />
 
-   
-
-        {/* Gifs */}
-        <GifsList gifs={mockGifs}/>
-        </>
-    )
-}
+      {/* Gifs */}
+      <GifList gifs={mockGifs} />
+    </>
+  );
+};
