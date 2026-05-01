@@ -1,6 +1,5 @@
 import { giphyApi } from '../api/giphy.api';
-
-import type { GiphyResponse } from '../interfaces/giphy.response';
+import type { GiphyResponse } from '../../mock-data/gifs/interfaces/giphy.response';
 import type { Gif } from '../interfaces/gif.interface';
 
 export const getGifsByQuery = async (query: string): Promise<Gif[]> => {
